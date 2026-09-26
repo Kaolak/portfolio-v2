@@ -1,4 +1,9 @@
 ---
+import { modules } from '../data/experienceModules.js';
+
+function renderTags(tech) {
+  return tech.map(t => `<span class="tag">${t}</span>`).join('');
+}
 ---
 
 <section class="section experience" id="experience">
@@ -11,12 +16,13 @@
         <div class="timeline-content">
           <div class="timeline-header">
             <h3 class="timeline-company">Auditoría General de la Provincia de Salta</h3>
-            <span class="timeline-date">2022 — Present</span>
+            <span class="timeline-date">2024 — Present</span>
           </div>
           <p class="timeline-role">Backend Developer</p>
           <p class="timeline-description">
-            Participación en el desarrollo y mantenimiento de sistemas
-            orientados a la gestión de procesos institucionales.
+            Participación en el desarrollo y evolución de una aplicación
+            institucional, a cargo del backend con Java (Spring Boot) y colaborando
+            con frontend cuando fue necesario.
           </p>
 
           <div class="timeline-details">
@@ -24,7 +30,8 @@
             <ul class="timeline-list">
               <li>Desarrollo de funcionalidades backend</li>
               <li>Diseño e implementación de APIs</li>
-              <li>Integración con bases de datos</li>
+              <li>Integración con bases de datos y almacenamiento de archivos</li>
+              <li>Participación en la planificación y diseño de soluciones tecnológicas</li>
               <li>Implementación de autenticación y autorización</li>
               <li>Desarrollo y mantenimiento de funcionalidades existentes</li>
               <li>Colaboración con frontend</li>
@@ -32,14 +39,53 @@
             </ul>
           </div>
 
+          <div class="modules-section">
+            <h4 class="timeline-subtitle">Key Modules & Features</h4>
+            <div class="modules-grid" role="list">
+              {modules.map((module) => (
+                <article
+                  class="module-card"
+                  role="listitem"
+                  tabindex="0"
+                  data-module-id={module.id}
+                  aria-describedby={`tooltip-${module.id}`}
+                >
+                  <div class="module-card-inner">
+                    <h5 class="module-title">{module.title}</h5>
+                    <p class="module-short">{module.shortDesc}</p>
+                  </div>
+
+                  <div
+                    id={`tooltip-${module.id}`}
+                    class="module-tooltip"
+                    role="tooltip"
+                    aria-hidden="true"
+                  >
+                    <div class="tooltip-content">
+                      <p class="tooltip-description">{module.description}</p>
+                      <div class="tooltip-tech" set:html={renderTags(module.tech)} />
+                    </div>
+                    <div class="tooltip-arrow" aria-hidden="true"></div>
+                  </div>
+
+                  <div class="module-expanded" aria-hidden="true" hidden>
+                    <p class="expanded-description">{module.description}</p>
+                    <div class="expanded-tech" set:html={renderTags(module.tech)} />
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <div class="timeline-tech">
             <span class="tag">Java</span>
             <span class="tag">Spring Boot</span>
-            <span class="tag">SQL</span>
             <span class="tag">React</span>
             <span class="tag">AWS</span>
             <span class="tag">Docker</span>
             <span class="tag">Git</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Vercel</span>
           </div>
         </div>
       </div>
@@ -160,5 +206,238 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+    padding-top: 1rem;
+  }
+
+  /* Modules section */
+  .modules-section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .module-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: default;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, z-index 0s;
+    z-index: 1;
+  }
+
+  .module-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+    z-index: 20;
+  }
+
+  .module-card:focus {
+    z-index: 20;
+  }
+
+  .module-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .module-card-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .module-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .module-short {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Tooltip (desktop hover) */
+  .module-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    width: max-content;
+    max-width: 320px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: var(--shadow);
+    transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+  }
+
+  .module-card:hover .module-tooltip,
+  .module-card:focus .module-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+    pointer-events: auto;
+  }
+
+  .module-card:focus .module-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .tooltip-content {
+    padding: 0.875rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .tooltip-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .tooltip-arrow {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 10px;
+    height: 10px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  /* Mobile expanded state */
+  .module-expanded {
+    display: none;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .module-card[data-expanded] .module-expanded {
+    display: block;
+  }
+
+  .expanded-description {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .expanded-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  @media (max-width: 768px) {
+    .modules-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .module-tooltip {
+      display: none;
+    }
+
+    .module-card:hover {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .module-card,
+    .module-tooltip,
+    .module-expanded {
+      transition: none;
+      animation: none;
+    }
   }
 </style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cards = document.querySelectorAll('.module-card');
+
+    cards.forEach(function (card) {
+      const expanded = card.querySelector('.module-expanded');
+      if (!expanded) return;
+
+      function toggleExpanded() {
+        const isExpanded = card.hasAttribute('data-expanded');
+        if (isExpanded) {
+          card.removeAttribute('data-expanded');
+          expanded.setAttribute('hidden', '');
+          expanded.setAttribute('aria-hidden', 'true');
+        } else {
+          card.setAttribute('data-expanded', '');
+          expanded.removeAttribute('hidden');
+          expanded.setAttribute('aria-hidden', 'false');
+        }
+      }
+
+      card.addEventListener('click', function (e) {
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          return;
+        }
+        if (e.target.closest('.module-tooltip')) return;
+        toggleExpanded();
+      });
+
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleExpanded();
+        }
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.module-card')) {
+        cards.forEach(function (card) {
+          if (card.hasAttribute('data-expanded')) {
+            card.removeAttribute('data-expanded');
+            const expanded = card.querySelector('.module-expanded');
+            if (expanded) {
+              expanded.setAttribute('hidden', '');
+              expanded.setAttribute('aria-hidden', 'true');
+            }
+          }
+        });
+      }
+    });
+  });
+</script>

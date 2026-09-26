@@ -3,9 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import ChallengeDiagram from '../../components/ChallengeDiagram.astro';
 import Footer from '../../components/Footer.astro';
+import Tabs from '../../components/Tabs.astro';
 import '../../styles/global.css';
 import '../../styles/components.css';
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, getEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const challenges = await getCollection('challenges');
@@ -17,6 +18,25 @@ export async function getStaticPaths() {
 
 const { challenge } = Astro.props;
 const { Content } = await render(challenge);
+
+const hasTabs = challenge.data.tabs && challenge.data.tabs.length > 0;
+
+let tabComponents: Record<string, { component: any; diagram?: string }> = {};
+
+if (hasTabs) {
+  for (const tab of challenge.data.tabs) {
+    try {
+      const tabEntry = await getEntry('challengeTabs', tab.content);
+      const { Content: TabContent } = await render(tabEntry);
+      tabComponents[tab.id] = {
+        component: TabContent,
+        diagram: tab.diagram,
+      };
+    } catch (e) {
+      console.warn(`Failed to load tab content for ${tab.content}:`, e);
+    }
+  }
+}
 ---
 
 <BaseLayout
@@ -48,8 +68,14 @@ const { Content } = await render(challenge);
           </div>
         </header>
 
-        {challenge.data.diagram && (
-          <ChallengeDiagram type={challenge.data.diagram as any} />
+        {hasTabs ? (
+          <Tabs tabs={challenge.data.tabs} components={tabComponents} />
+        ) : (
+          <>
+            {challenge.data.diagram && (
+              <ChallengeDiagram type={challenge.data.diagram as any} />
+            )}
+          </>
         )}
 
         <div class="challenge-content fade-in">
@@ -83,7 +109,7 @@ const { Content } = await render(challenge);
   }
 
   .challenge-article {
-    max-width: 720px;
+    max-width: 900px;
   }
 
   .challenge-header {

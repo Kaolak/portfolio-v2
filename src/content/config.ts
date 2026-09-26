@@ -23,7 +23,20 @@ const challenges = defineCollection({
     technologies: z.array(z.string()),
     featured: z.boolean().default(false),
     diagram: z.string().optional(),
+    tabs: z.array(z.object({
+      id: z.string(),
+      label: z.string(),
+      content: z.string(),
+      diagram: z.string().optional(),
+    })).optional(),
   }),
 });
 
-export const collections = { projects, challenges };
+const challengeTabs = defineCollection({
+  type: 'content',
+  schema: z.object({
+    diagram: z.string().optional(),
+  }),
+});
+
+export const collections = { projects, challenges, challengeTabs };

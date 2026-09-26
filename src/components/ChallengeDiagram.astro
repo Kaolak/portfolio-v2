@@ -1,6 +1,6 @@
 ---
 interface Props {
-  type: 'query-optimization' | 'auth-flow' | 'file-upload' | 'error-reporting';
+  type: 'query-optimization' | 'query-optimization-detailed' | 'auth-flow' | 'file-upload' | 'file-upload-async' | 'file-upload-sync' | 'error-reporting' | 'property-clustering' | 'mercadolibre-publication';
 }
 
 const { type } = Astro.props;
@@ -104,6 +104,427 @@ const diagrams: Record<string, string> = {
       <text x="220" y="254" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">Browser</text>
       <text x="300" y="254" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">Timestamp</text>
     </svg>`,
+  'file-upload-async': `
+    <svg viewBox="0 0 440 330" fill="none" xmlns="http://www.w3.org/2000/svg" class="diagram-svg">
+      <!-- Title -->
+      <text x="240" y="14" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Approach 1: Direct Upload + Async Validation</text>
+
+      <!-- Client -->
+      <rect x="165" y="25" width="150" height="32" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="240" y="46" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Client</text>
+
+      <!-- Signed URL arrow -->
+      <line x1="240" y1="57" x2="240" y2="67" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,67 236,61 244,61" fill="currentColor"/>
+      <text x="240" y="73" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">signed PUT URL</text>
+
+      <!-- Permanent Bucket -->
+      <rect x="140" y="75" width="200" height="35" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="240" y="93" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Permanent Bucket</text>
+      <text x="240" y="102" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">(final destination)</text>
+
+      <!-- Upload arrow -->
+      <line x1="240" y1="110" x2="240" y2="120" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,120 236,114 244,114" fill="var(--accent)"/>
+      <text x="240" y="125" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">1. upload file</text>
+
+      <!-- Confirm arrow -->
+      <line x1="240" y1="128" x2="240" y2="138" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,138 236,132 244,132" fill="currentColor"/>
+      <text x="240" y="143" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">2. confirm</text>
+
+      <!-- Backend -->
+      <rect x="165" y="148" width="150" height="27" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="240" y="165" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Backend</text>
+
+      <!-- Enqueue validation -->
+      <line x1="240" y1="175" x2="240" y2="185" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="240,185 236,179 244,179" fill="var(--accent)"/>
+      <text x="240" y="190" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">3. enqueue validations</text>
+
+      <!-- Validation Pipeline Box -->
+      <rect x="45" y="192" width="390" height="92" rx="6" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="240" y="206" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace" font-weight="bold">Validation Pipeline (async)</text>
+
+      <!-- Validation steps - compact horizontal row -->
+      <g font-size="8" font-family="JetBrains Mono, monospace" fill="currentColor">
+        <rect x="55" y="218" width="62" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="86" y="232" text-anchor="middle" fill="var(--accent)">Existence</text>
+
+        <rect x="125" y="218" width="62" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="156" y="232" text-anchor="middle" fill="var(--accent)">Integrity</text>
+
+        <rect x="195" y="218" width="78" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="234" y="232" text-anchor="middle" fill="var(--accent)">Antivirus</text>
+
+        <rect x="281" y="218" width="62" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="312" y="232" text-anchor="middle" fill="var(--accent)">Format</text>
+
+        <rect x="55" y="246" width="140" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="125" y="260" text-anchor="middle" fill="var(--accent)">Business Rules</text>
+
+        <rect x="205" y="246" width="130" height="20" rx="3" stroke="currentColor" stroke-width="1"/>
+        <text x="270" y="260" text-anchor="middle" fill="var(--accent)">Quotas & Limits</text>
+      </g>
+
+      <!-- Status API -->
+      <line x1="240" y1="285" x2="240" y2="292" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="240,292 236,286 244,286" fill="var(--accent)"/>
+
+      <rect x="165" y="293" width="150" height="30" rx="5" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="240" y="312" text-anchor="middle" fill="var(--accent)" font-size="9" font-family="JetBrains Mono, monospace">Status API</text>
+    </svg>`,
+  'file-upload-sync': `
+    <svg viewBox="0 0 440 350" fill="none" xmlns="http://www.w3.org/2000/svg" class="diagram-svg">
+      <!-- Title -->
+      <text x="240" y="14" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Approach 2: Staged Upload + Sync Validation</text>
+
+      <!-- Client -->
+      <rect x="165" y="25" width="150" height="30" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="240" y="45" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Client</text>
+
+      <!-- Phase 1: Pre-upload -->
+      <line x1="240" y1="57" x2="240" y2="67" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,67 236,61 244,61" fill="currentColor"/>
+      <text x="275" y="68" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">signed PUT URL</text>
+
+      <!-- Temp Bucket -->
+      <rect x="125" y="70" width="230" height="48" rx="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <text x="240" y="92" text-anchor="middle" fill="currentColor" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Temp Bucket</text>
+      <text x="240" y="103" text-anchor="middle" fill="currentColor" font-size="8" font-family="JetBrains Mono, monospace">/userid/operationid/</text>
+      <text x="240" y="110" text-anchor="middle" fill="currentColor" font-size="6" font-family="JetBrains Mono, monospace">(short TTL · user-scoped · attempt-scoped)</text>
+
+      <!-- Upload arrow -->
+      <line x1="240" y1="118" x2="240" y2="128" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,128 236,122 244,122" fill="currentColor"/>
+      <text x="240" y="133" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">1. pre-upload file</text>
+
+      <!-- Phase 2: Business Operation -->
+      <line x1="240" y1="136" x2="240" y2="146" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="240,146 236,140 244,140" fill="var(--accent)"/>
+      <text x="240" y="151" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">2. POST { operationid }</text>
+
+      <!-- Backend -->
+      <rect x="165" y="155" width="150" height="28" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="240" y="172" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Backend</text>
+
+      <!-- Retrieve from temp -->
+      <line x1="240" y1="183" x2="240" y2="193" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="240,193 236,187 244,187" fill="currentColor"/>
+      <text x="240" y="198" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">3. GET /userid/opid/</text>
+
+      <!-- Validation Pipeline (sync) -->
+      <rect x="45" y="200" width="390" height="105" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="240" y="215" text-anchor="middle" fill="var(--accent)" font-size="9" font-family="JetBrains Mono, monospace" font-weight="bold">Validation Pipeline (sync - blocks)</text>
+
+      <!-- Validation steps - compact horizontal rows -->
+      <g font-size="8" font-family="JetBrains Mono, monospace" fill="currentColor">
+        <rect x="55" y="225" width="62" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="86" y="239" text-anchor="middle" fill="var(--accent)">Existence</text>
+
+        <rect x="125" y="225" width="62" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="156" y="239" text-anchor="middle" fill="var(--accent)">Integrity</text>
+
+        <rect x="195" y="225" width="78" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="234" y="239" text-anchor="middle" fill="var(--accent)">Antivirus</text>
+
+        <rect x="281" y="225" width="62" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="312" y="239" text-anchor="middle" fill="var(--accent)">Format</text>
+
+        <rect x="55" y="253" width="140" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="125" y="267" text-anchor="middle" fill="var(--accent)">Business Rules</text>
+
+        <rect x="205" y="253" width="130" height="20" rx="3" stroke="var(--accent)" stroke-width="1"/>
+        <text x="270" y="267" text-anchor="middle" fill="var(--accent)">Quotas & Limits</text>
+
+        <rect x="55" y="281" width="280" height="20" rx="3" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="195" y="295" text-anchor="middle" fill="var(--accent)">Move to Permanent Bucket</text>
+      </g>
+
+      <!-- Result indicators on right side -->
+      <text x="420" y="245" text-anchor="end" fill="#22c55e" font-size="7" font-family="JetBrains Mono, monospace">✓ pass → move</text>
+      <text x="450" y="265" text-anchor="end" fill="#ef4444" font-size="7" font-family="JetBrains Mono, monospace">✗ fail → reject</text>
+
+      <!-- Success outcome -->
+      <rect x="140" y="312" width="200" height="32" rx="5" stroke="#22c55e" stroke-width="1.5" fill="rgba(34,197,94,0.1)"/>
+      <text x="240" y="332" text-anchor="middle" fill="#22c55e" font-size="10" font-family="JetBrains Mono, monospace" font-weight="bold">Operation Complete</text>
+    </svg>`,
+'query-optimization-detailed': `
+    <svg viewBox="0 0 440 410" fill="none" xmlns="http://www.w3.org/2000/svg" class="diagram-svg">
+      <!-- Title -->
+      <text x="220" y="14" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Query Optimization with Cache Layers</text>
+
+      <!-- Client -->
+      <rect x="170" y="25" width="100" height="32" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="46" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Client</text>
+
+      <!-- HTTP Cache Layer -->
+      <line x1="220" y1="57" x2="220" y2="67" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,67 216,61 224,61" fill="currentColor"/>
+      <text x="220" y="73" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">HTTP Request</text>
+
+      <rect x="120" y="75" width="200" height="35" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="220" y="93" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace" font-weight="bold">HTTP Cache</text>
+      <text x="220" y="102" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">ShallowETag · Last-Modified · Cache-Control</text>
+
+      <!-- 304 / 200 -->
+      <line x1="220" y1="110" x2="220" y2="120" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,120 216,114 224,114" fill="var(--accent)"/>
+      <text x="220" y="125" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">304 Not Modified / 200 OK</text>
+
+      <!-- REST API / Controller -->
+      <line x1="220" y1="128" x2="220" y2="138" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,138 216,132 224,132" fill="currentColor"/>
+      <text x="220" y="143" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Request</text>
+
+      <rect x="150" y="148" width="140" height="30" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="167" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">REST API</text>
+      <text x="220" y="174" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">(Controller)</text>
+
+      <!-- Internal Cache Layer -->
+      <line x1="220" y1="178" x2="220" y2="188" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,188 216,182 224,182" fill="currentColor"/>
+      <text x="220" y="193" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">@Cacheable lookup</text>
+
+      <rect x="120" y="195" width="200" height="35" rx="6" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" fill="rgba(249,115,22,0.08)"/>
+      <text x="220" y="213" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace" font-weight="bold">Internal Cache (Spring @Cacheable)</text>
+      <text x="220" y="222" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Caffeine · TTL · @CacheEvict on write</text>
+
+      <!-- Hit / Miss -->
+      <line x1="220" y1="230" x2="220" y2="240" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="220,240 216,234 224,234" fill="var(--accent)"/>
+      <text x="220" y="245" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">hit → return / miss → proceed</text>
+
+      <!-- Service -->
+      <line x1="220" y1="248" x2="220" y2="258" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,258 216,252 224,252" fill="currentColor"/>
+      <text x="220" y="263" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Service call</text>
+
+      <rect x="140" y="265" width="160" height="30" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="283" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Service</text>
+
+      <!-- Optimized Queries Box -->
+      <line x1="220" y1="295" x2="220" y2="305" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="220,305 216,299 224,299" fill="currentColor"/>
+      <text x="220" y="310" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Optimized queries</text>
+
+      <rect x="70" y="315" width="300" height="40" rx="6" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="220" y="328" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace" font-weight="bold">Optimized Data Access</text>
+      <g font-size="7" font-family="JetBrains Mono, monospace" fill="currentColor">
+        <text x="100" y="342" text-anchor="middle">JOIN FETCH / EntityGraph</text>
+        <text x="220" y="342" text-anchor="middle">DTO Projections</text>
+        <text x="340" y="342" text-anchor="middle">No N+1</text>
+      </g>
+
+      <!-- Database -->
+      <line x1="220" y1="355" x2="220" y2="365" stroke="currentColor" stroke-width="1.5"/>
+      <polygon points="220,365 216,359 224,359" fill="currentColor"/>
+
+      <rect x="170" y="367" width="100" height="28" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="385" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Database</text>
+    </svg>`,
+  'property-clustering': `
+    <svg viewBox="0 0 440 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="diagram-svg">
+      <!-- Title -->
+      <text x="220" y="14" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Property Clustering Pipeline</text>
+
+      <!-- User / Express API -->
+      <rect x="160" y="25" width="120" height="32" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="46" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Express.js API</text>
+
+      <!-- Property created/updated -->
+      <line x1="220" y1="57" x2="220" y2="67" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,67 216,61 224,61" fill="currentColor"/>
+      <text x="220" y="73" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Property created/updated</text>
+
+      <!-- Trigger async process -->
+      <line x1="220" y1="75" x2="220" y2="85" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="220,85 216,79 224,79" fill="var(--accent)"/>
+      <text x="220" y="90" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">async trigger</text>
+
+      <!-- Async Process / Queue -->
+      <rect x="120" y="95" width="200" height="35" rx="6" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" fill="var(--accent-muted)"/>
+      <text x="220" y="113" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace" font-weight="bold">Async Process</text>
+      <text x="220" y="122" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">(background job)</text>
+
+      <!-- Call Python/Flask Service -->
+      <line x1="220" y1="130" x2="220" y2="140" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="220,140 216,134 224,134" fill="var(--accent)"/>
+      <text x="220" y="145" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">HTTP request</text>
+
+      <!-- Python/Flask Service -->
+      <rect x="100" y="150" width="240" height="55" rx="8" stroke="var(--accent)" stroke-width="2" fill="rgba(249,115,22,0.1)"/>
+      <text x="220" y="170" text-anchor="middle" fill="var(--accent)" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Python / Flask Service</text>
+      <text x="220" y="182" text-anchor="middle" fill="var(--accent)" font-size="8" font-family="JetBrains Mono, monospace">scikit-learn · K-Means</text>
+      <text x="220" y="192" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">p properties → k clusters (k = related count)</text>
+
+      <!-- K-Means Process -->
+      <line x1="220" y1="205" x2="220" y2="215" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,215 216,209 224,209" fill="currentColor"/>
+      <text x="220" y="220" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Clustering</text>
+
+      <!-- Steps inside clustering -->
+      <rect x="80" y="225" width="280" height="65" rx="6" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="220" y="238" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace" font-weight="bold">K-Means Pipeline</text>
+      <g font-size="7" font-family="JetBrains Mono, monospace" fill="currentColor">
+        <text x="220" y="252" text-anchor="middle">1. Fetch all properties from Express API</text>
+        <text x="220" y="264" text-anchor="middle">2. Feature engineering: price, location, size, type, amenities</text>
+        <text x="220" y="276" text-anchor="middle">3. Normalize features · Run K-Means (k = related count)</text>
+        <text x="220" y="288" text-anchor="middle">4. Return { propertyId: clusterId } mapping</text>
+      </g>
+
+      <!-- Return response -->
+      <line x1="220" y1="295" x2="220" y2="305" stroke="var(--accent)" stroke-width="1.5"/>
+      <polygon points="220,305 216,299 224,299" fill="var(--accent)"/>
+      <text x="220" y="310" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">HTTP response: clusters</text>
+
+      <!-- Update Express API / Database -->
+      <line x1="220" y1="313" x2="220" y2="323" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,323 216,317 224,317" fill="currentColor"/>
+      <text x="220" y="328" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Update cluster field</text>
+
+      <rect x="160" y="333" width="120" height="32" rx="5" stroke="currentColor" stroke-width="1.5"/>
+      <text x="220" y="354" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Database</text>
+      <text x="220" y="362" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">property.cluster = N</text>
+
+      <!-- Frontend Query -->
+      <line x1="220" y1="365" x2="220" y2="375" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <polygon points="220,375 216,369 224,369" fill="currentColor"/>
+      <text x="220" y="380" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Frontend: GET /properties?cluster=n</text>
+    </svg>`,
+'mercadolibre-publication': `
+    <svg viewBox="0 0 900 765" fill="none" xmlns="http://www.w3.org/2000/svg" class="diagram-svg">
+      <!-- ============================================================
+           CONTAINERS (dashed rectangles with labels)
+           ============================================================ -->
+
+      <!-- Backend Container -->
+      <rect x="34" y="19" width="353" height="360" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8,6" rx="4"/>
+      <text x="210" y="35" text-anchor="middle" fill="currentColor" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Backend</text>
+
+      <!-- Frontend Container -->
+      <rect x="64" y="435" width="263" height="319" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8,6" rx="4"/>
+      <text x="195" y="451" text-anchor="middle" fill="currentColor" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">Frontend</text>
+
+      <!-- MercadoLibreAPI Container -->
+      <rect x="499" y="345" width="394" height="188" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8,6" rx="4"/>
+      <text x="696" y="361" text-anchor="middle" fill="currentColor" font-size="11" font-family="JetBrains Mono, monospace" font-weight="bold">MercadoLibreAPI</text>
+
+      <!-- ============================================================
+           NODES
+           ============================================================ -->
+
+      <!-- 1.1 Servicio de Propiedades -->
+      <rect x="124" y="83" width="124" height="53" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="186" y="100" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Servicio de</text>
+      <text x="186" y="113" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Propiedades</text>
+
+      <!-- 1.2 Servicio MercadoLibre (highlighted) -->
+      <rect x="214" y="203" width="124" height="53" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="276" y="220" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace" font-weight="bold">Servicio</text>
+      <text x="276" y="233" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace">MercadoLibre</text>
+
+      <!-- 1.3 Controlador de Propiedades -->
+      <rect x="94" y="289" width="124" height="53" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="156" y="306" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Controlador de</text>
+      <text x="156" y="319" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Propiedades</text>
+
+      <!-- 2.1 Interfaz de Usuario -->
+      <rect x="143" y="503" width="124" height="53" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="205" y="520" text-anchor="middle" fill="currentColor" font-size="10" font-family="JetBrains Mono, monospace">Interfaz de Usuario</text>
+
+      <!-- 2.2 Modal de MercadoLibre -->
+      <rect x="143" y="585" width="124" height="53" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="205" y="602" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">Modal de</text>
+      <text x="205" y="615" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">MercadoLibre</text>
+
+      <!-- 2.3 Detalle de Propiedad -->
+      <rect x="143" y="671" width="124" height="53" rx="6" stroke="currentColor" stroke-width="1.5"/>
+      <text x="205" y="688" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">Detalle de</text>
+      <text x="205" y="701" text-anchor="middle" fill="currentColor" font-size="9" font-family="JetBrains Mono, monospace">Propiedad</text>
+
+      <!-- 3.1 Publicación (highlighted) -->
+      <rect x="563" y="416" width="124" height="53" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="625" y="433" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace">Publicación</text>
+
+      <!-- 3.2 Autenticación (highlighted) -->
+      <rect x="735" y="405" width="124" height="53" rx="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent-muted)"/>
+      <text x="797" y="422" text-anchor="middle" fill="var(--accent)" font-size="10" font-family="JetBrains Mono, monospace">Autenticación</text>
+
+      <!-- ============================================================
+           CONNECTORS (orthogonal polylines with polygon arrowheads)
+           ============================================================ -->
+
+      <!-- A) Servicio de Propiedades -> Servicio MercadoLibre: "Obtener datos" -->
+      <polyline points="186,136 186,160 110,160 110,288" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="110,288 106,280 114,280" fill="currentColor"/>
+      <text x="132" y="155" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Obtener datos</text>
+
+      <!-- B) Controlador -> Servicio MercadoLibre: "Publicar" -->
+      <polyline points="130,289 130,215 214,215" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+      <polygon points="214,215 206,211 206,219" fill="currentColor"/>
+      <text x="185" y="210" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Publicar</text>
+
+      <!-- C) Servicio MercadoLibre -> Controlador: "Confirmación" -->
+      <polyline points="219,320 276,320 276,256" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="219,320 226,316 226,324" fill="currentColor"/>
+      <text x="250" y="330" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Confirmación</text>
+
+      <!-- D) Servicio MercadoLibre -> Autenticación: "Enviar código" (accent flow) -->
+      <polyline points="276,200 276,180 820,180 820,405" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+      <polygon points="820,405 816,399 824,399" fill="var(--accent)"/>
+      <text x="570" y="170" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Enviar código</text>
+
+      <!-- E) Autenticación -> Servicio MercadoLibre: "Obtener token" (accent return) -->
+      <polyline points="340,220 780,220 780,405" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+      <polygon points="340,220 348,216 348,224" fill="var(--accent)"/>
+      <text x="570" y="210" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Obtener token</text>
+
+      <!-- F) Servicio MercadoLibre -> Publicación: "Publicar datos" (accent flow) -->
+      <polyline points="338,245 640,245 640,416" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+      <polygon points="640,416 636,408 644,408" fill="var(--accent)"/>
+      <text x="450" y="235" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Publicar datos</text>
+
+      <!-- G) Confirmar publicación return flow (accent) -->
+      <polyline points="560,425 320,425 320,256" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="4,4"/>
+      <polygon points="320,256 316,264 324,264" fill="var(--accent)"/>
+      <text x="390" y="415" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Confirmar publicación</text>
+
+      <!-- H) Controller -> Frontend/Interfaz: "Mostrar confirmación" -->
+      <polyline points="156,342 156,370 205,370 205,503" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="205,503 201,495 209,495" fill="currentColor"/>
+      <text x="180" y="385" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Mostrar confirmación</text>
+
+      <!-- I) Interfaz -> Modal: "Solicitar publicación" -->
+      <polyline points="205,556 205,585" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="205,585 201,577 209,577" fill="currentColor"/>
+      <text x="218" y="545" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Solicitar publicación</text>
+
+      <!-- J) Modal -> Detalle: "Iniciar autenticación" -->
+      <polyline points="205,638 205,671" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="205,671 201,663 209,663" fill="currentColor"/>
+      <text x="218" y="630" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Iniciar autenticación</text>
+
+      <!-- K) Detalle -> Autenticación: "Solicitar OAuth" -->
+      <polyline points="267,704 797,704 797,466" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="797,458 793,466 801,466" fill="currentColor"/>
+      <text x="530" y="712" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Solicitar OAuth</text>
+
+      <!-- L) Autenticación -> Detalle: "Devolver código" (accent return) -->
+      <polyline points="750,458 750,690 267,690" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+      <polygon points="267,690 275,686 275,694" fill="var(--accent)"/>
+      <text x="465" y="680" text-anchor="middle" fill="var(--accent)" font-size="7" font-family="JetBrains Mono, monospace">Devolver código</text>
+
+      <!-- M) Detalle -> Controller: "Publicar propiedad" -->
+      <polyline points="205,724 205,760 50,760 50,322 90,322" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="94,322 86,326 86,318" fill="currentColor"/>
+      <text x="45" y="550" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Publicar propiedad</text>
+
+      <!-- N) Controller -> Servicio MercadoLibre: "Código" -->
+      <polyline points="156,306 156,230 214,230" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <polygon points="214,230 206,226 206,234" fill="currentColor"/>
+      <text x="180" y="245" text-anchor="middle" fill="currentColor" font-size="7" font-family="JetBrains Mono, monospace">Código</text>
+    </svg>`,
 };
 ---
 
@@ -113,7 +534,7 @@ const diagrams: Record<string, string> = {
 
 <style>
   .diagram-container {
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -124,7 +545,7 @@ const diagrams: Record<string, string> = {
 
   .diagram-svg {
     width: 100%;
-    max-width: 440px;
+    max-width: 720px;
     height: auto;
     color: var(--text-primary);
   }

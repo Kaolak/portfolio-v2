@@ -1,0 +1,210 @@
+---
+import ChallengeDiagram from './ChallengeDiagram.astro';
+
+interface Props {
+  tabs: Array<{
+    id: string;
+    label: string;
+    diagram?: string;
+  }>;
+  components: Record<string, { component: any; diagram?: string }>;
+}
+
+const { tabs, components } = Astro.props;
+const tab0 = tabs[0];
+const tab1 = tabs[1];
+const comp0 = tab0 ? components[tab0.id] : undefined;
+const comp1 = tab1 ? components[tab1.id] : undefined;
+---
+
+<div class="approach-tabs fade-in">
+  <div class="tab-buttons" role="tablist" aria-label="Approach selection">
+    <button
+      role="tab"
+      aria-selected="true"
+      aria-controls={`panel-${tab0?.id}`}
+      id={`tab-${tab0?.id}`}
+      class="tab-btn active"
+      data-tab={tab0?.id}
+    >
+      {tab0?.label}
+    </button>
+    <button
+      role="tab"
+      aria-selected="false"
+      aria-controls={`panel-${tab1?.id}`}
+      id={`tab-${tab1?.id}`}
+      class="tab-btn"
+      data-tab={tab1?.id}
+    >
+      {tab1?.label}
+    </button>
+  </div>
+
+  <div class="tab-panel active" id={`panel-${tab0?.id}`} role="tabpanel" aria-labelledby={`tab-${tab0?.id}`} data-panel={tab0?.id}>
+    <div class="approach-content">
+      {comp0?.component && <comp0.component />}
+    </div>
+    {comp0?.diagram && (
+      <div class="tab-diagram">
+        <ChallengeDiagram type={comp0.diagram as any} />
+      </div>
+    )}
+  </div>
+
+  <div class="tab-panel" id={`panel-${tab1?.id}`} role="tabpanel" aria-labelledby={`tab-${tab1?.id}`} data-panel={tab1?.id}>
+    <div class="approach-content">
+      {comp1?.component && <comp1.component />}
+    </div>
+    {comp1?.diagram && (
+      <div class="tab-diagram">
+        <ChallengeDiagram type={comp1.diagram as any} />
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .approach-tabs {
+    margin: 2rem 0 3rem;
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: -1px;
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .tab-panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .approach-content {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .approach-content :global(h2) {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .approach-content :global(h3) {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .approach-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .approach-content :global(ol) {
+    margin: 1rem 0 1.5rem 1.5rem;
+  }
+
+  .approach-content :global(li) {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+
+  .approach-content :global(code) {
+    background: var(--code-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  .approach-content :global(strong) {
+    color: var(--text-primary);
+  }
+
+  .tab-diagram {
+    margin-top: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-panel {
+      animation: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const tab = btn.getAttribute('data-tab');
+
+        tabButtons.forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        tabPanels.forEach(function (panel) {
+          if (panel.getAttribute('data-panel') === tab) {
+            panel.classList.add('active');
+          } else {
+            panel.classList.remove('active');
+          }
+        });
+      });
+
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  });
+</script>
