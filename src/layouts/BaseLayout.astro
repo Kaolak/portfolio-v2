@@ -32,7 +32,10 @@ const fullTitle = title === siteTitle ? title : `${title} | Esteban Pinto`;
     <!-- Theme flash prevention -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem('theme');
+        let stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+        } catch {}
         const theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         document.documentElement.setAttribute('data-theme', theme);
       })();
