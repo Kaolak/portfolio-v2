@@ -1,0 +1,164 @@
+---
+---
+
+<section class="section experience" id="experience">
+  <div class="container">
+    <h2 class="section-title fade-in">Experience</h2>
+
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <h3 class="timeline-company">Auditoría General de la Provincia de Salta</h3>
+            <span class="timeline-date">2022 — Present</span>
+          </div>
+          <p class="timeline-role">Backend Developer</p>
+          <p class="timeline-description">
+            Participación en el desarrollo y mantenimiento de sistemas
+            orientados a la gestión de procesos institucionales.
+          </p>
+
+          <div class="timeline-details">
+            <h4 class="timeline-subtitle">Responsibilities</h4>
+            <ul class="timeline-list">
+              <li>Desarrollo de funcionalidades backend</li>
+              <li>Diseño e implementación de APIs</li>
+              <li>Integración con bases de datos</li>
+              <li>Implementación de autenticación y autorización</li>
+              <li>Desarrollo y mantenimiento de funcionalidades existentes</li>
+              <li>Colaboración con frontend</li>
+              <li>Automatización de procesos de desarrollo y despliegue</li>
+            </ul>
+          </div>
+
+          <div class="timeline-tech">
+            <span class="tag">Java</span>
+            <span class="tag">Spring Boot</span>
+            <span class="tag">SQL</span>
+            <span class="tag">React</span>
+            <span class="tag">AWS</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--background);
+    z-index: 1;
+  }
+
+  .timeline-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-company {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .timeline-date {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .timeline-role {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .timeline-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .timeline-subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .timeline-list {
+    display: grid;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .timeline-list li {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .timeline-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .timeline-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+</style>

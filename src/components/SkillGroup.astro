@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  skills: string[];
+}
+
+const { title, skills } = Astro.props;
+---
+
+<div class="skill-group fade-in">
+  <h3 class="skill-group-title">{title}</h3>
+  <div class="skill-list">
+    {skills.map((skill) => (
+      <span class="skill-item">{skill}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .skill-group {
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .skill-group-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .skill-item {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0;
+  }
+
+  .skill-item::after {
+    content: ' ·';
+    color: var(--border);
+  }
+
+  .skill-item:last-child::after {
+    content: '';
+  }
+</style>

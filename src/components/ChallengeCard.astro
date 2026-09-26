@@ -1,0 +1,77 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  technologies: string[];
+  slug: string;
+}
+
+const { title, description, technologies, slug } = Astro.props;
+---
+
+<a href={`/challenges/${slug}`} class="card challenge-card fade-in">
+  <span class="challenge-label">Challenge</span>
+  <h3 class="challenge-title">{title}</h3>
+  <p class="challenge-description">{description}</p>
+  <div class="challenge-tech">
+    {technologies.map((tech) => (
+      <span class="tag">{tech}</span>
+    ))}
+  </div>
+  <span class="challenge-link">
+    Read more
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .challenge-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .challenge-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 0.5rem;
+  }
+
+  .challenge-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .challenge-description {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+
+  .challenge-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .challenge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>

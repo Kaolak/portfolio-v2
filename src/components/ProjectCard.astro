@@ -1,0 +1,84 @@
+---
+interface Props {
+  title: string;
+  category: string;
+  description: string;
+  technologies: string[];
+  slug: string;
+  featured?: boolean;
+}
+
+const { title, category, description, technologies, slug, featured } = Astro.props;
+---
+
+<a href={`/projects/${slug}`} class={`card project-card fade-in ${featured ? 'featured' : ''}`}>
+  <div class="project-card-header">
+    <span class="project-category">{category}</span>
+  </div>
+  <h3 class="project-title">{title}</h3>
+  <p class="project-description">{description}</p>
+  <div class="project-tech">
+    {technologies.map((tech) => (
+      <span class="tag">{tech}</span>
+    ))}
+  </div>
+  <span class="project-link">
+    View details
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .project-card-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .project-category {
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .project-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-description {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>

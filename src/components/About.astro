@@ -1,0 +1,86 @@
+---
+---
+
+<section class="section about" id="about">
+  <div class="container">
+    <h2 class="section-title fade-in">About me</h2>
+
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>
+          Soy desarrollador de software con foco principalmente en backend.
+          Me interesa diseñar y construir sistemas que sean mantenibles,
+          seguros y capaces de resolver problemas reales.
+        </p>
+        <p>
+          Trabajo principalmente con Java y Spring Boot, aunque también
+          tengo experiencia trabajando con frontend, bases de datos,
+          servicios cloud y herramientas de automatización.
+        </p>
+      </div>
+
+      <div class="about-education fade-in">
+        <div class="education-card">
+          <span class="education-icon" aria-hidden="true">&#127891;</span>
+          <div>
+            <p class="education-title">Licenciado en Análisis de Sistemas</p>
+            <p class="education-place">Universidad Nacional de Salta</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .about-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .education-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .education-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .education-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .education-place {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>
