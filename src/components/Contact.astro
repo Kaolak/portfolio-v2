@@ -27,16 +27,27 @@
           </svg>
           LinkedIn
         </a>
-        <a href="mailto:esteban&#64;example.com" class="contact-link email-link">
+        <a href="mailto:jestebanpintog&#64;gmail.com" class="contact-link email-link">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
-          Email
+          jestebanpintog@gmail.com
         </a>
+        <button type="button" class="contact-link copy-btn" id="copy-email" data-email="jestebanpintog@gmail.com" aria-label="Copy email to clipboard">
+          <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+
+          <span class="copy-label">Copiar</span>
+        </button>
       </div>
 
-      <a href="mailto:esteban&#64;example.com" class="btn btn-primary contact-cta">
+      <a href="mailto:jestebanpintog&#64;gmail.com" class="btn btn-primary contact-cta">
         Get in touch
       </a>
     </div>
@@ -76,11 +87,71 @@
     color: var(--accent);
   }
 
-  .email-link {
-    direction: rtl;
+  .copy-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .copy-btn .check-icon {
+    display: none;
+  }
+
+  .copy-btn.copied {
+    color: var(--accent);
+  }
+
+  .copy-btn.copied .copy-icon {
+    display: none;
+  }
+
+  .copy-btn.copied .check-icon {
+    display: block;
   }
 
   .contact-cta {
     font-size: 0.95rem;
   }
 </style>
+
+<script>
+  const btn = document.getElementById('copy-email') as HTMLButtonElement | null;
+
+  if (btn) {
+    const label = btn.querySelector('.copy-label');
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const fallbackCopy = (text: string) => {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    };
+
+    btn.addEventListener('click', async () => {
+      const email = btn.dataset.email ?? '';
+
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        fallbackCopy(email);
+      }
+
+      btn.classList.add('copied');
+      if (label) label.textContent = '¡Copiado!';
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        btn.classList.remove('copied');
+        if (label) label.textContent = 'Copiar';
+      }, 2000);
+    });
+  }
+</script>
