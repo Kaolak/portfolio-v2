@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import ProjectDiagram from '../../components/ProjectDiagram.astro';
 import '../../styles/global.css';
 import '../../styles/components.css';
 import { getCollection, render } from 'astro:content';
@@ -16,6 +17,7 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const hasDiagram = project.data.diagram;
 ---
 
 <BaseLayout
@@ -71,6 +73,10 @@ const { Content } = await render(project);
               This page presents the project at a high level and focuses on the skills and responsibilities involved.
             </p>
           </div>
+        )}
+
+        {hasDiagram && (
+          <ProjectDiagram type={project.data.diagram as any} />
         )}
 
         <div class="project-content fade-in">

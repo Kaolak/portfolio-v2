@@ -11,6 +11,7 @@ const projects = defineCollection({
     technologies: z.array(z.string()),
     github: z.string().optional(),
     demo: z.string().optional(),
+    diagram: z.string().optional(),
   }),
 });
 
