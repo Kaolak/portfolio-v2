@@ -11,7 +11,6 @@ technologies:
   - React
   - Python
   - Machine Learning
-github: "https://github.com/estebanpinto/real-estate-platform"
 ---
 
 ## Overview
