@@ -1,17 +1,19 @@
 ---
+import { resolveLocale, useI18n } from '../i18n';
+
+const { t } = useI18n(resolveLocale(Astro.currentLocale));
 ---
 
 <section class="section contact" id="contact">
   <div class="container">
-    <h2 class="section-title fade-in">Let's work together</h2>
+    <h2 class="section-title fade-in">{t('contact.title')}</h2>
 
     <div class="contact-content fade-in">
       <p class="contact-text">
-        ¿Tenés un proyecto, una oportunidad laboral o simplemente
-        querés ponerte en contacto?
+        {t('contact.text1')}
       </p>
       <p class="contact-text">
-        Podés encontrarme en:
+        {t('contact.text2')}
       </p>
 
       <div class="contact-links">
@@ -34,7 +36,15 @@
           </svg>
           jestebanpintog@gmail.com
         </a>
-        <button type="button" class="contact-link copy-btn" id="copy-email" data-email="jestebanpintog@gmail.com" aria-label="Copy email to clipboard">
+        <button
+          type="button"
+          class="contact-link copy-btn"
+          id="copy-email"
+          data-email="jestebanpintog@gmail.com"
+          data-label-copy={t('contact.copy')}
+          data-label-copied={t('contact.copied')}
+          aria-label={t('a11y.copyEmail')}
+        >
           <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -43,12 +53,12 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
 
-          <span class="copy-label">Copiar</span>
+          <span class="copy-label">{t('contact.copy')}</span>
         </button>
       </div>
 
       <a href="mailto:jestebanpintog&#64;gmail.com" class="btn btn-primary contact-cta">
-        Get in touch
+        {t('contact.cta')}
       </a>
     </div>
   </div>
@@ -137,6 +147,8 @@
 
     btn.addEventListener('click', async () => {
       const email = btn.dataset.email ?? '';
+      const labelCopy = btn.dataset.labelCopy ?? 'Copy';
+      const labelCopied = btn.dataset.labelCopied ?? 'Copied!';
 
       try {
         await navigator.clipboard.writeText(email);
@@ -145,12 +157,12 @@
       }
 
       btn.classList.add('copied');
-      if (label) label.textContent = '¡Copiado!';
+      if (label) label.textContent = labelCopied;
 
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         btn.classList.remove('copied');
-        if (label) label.textContent = 'Copiar';
+        if (label) label.textContent = labelCopy;
       }, 2000);
     });
   }

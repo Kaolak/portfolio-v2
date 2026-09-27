@@ -1,6 +1,6 @@
 ---
 title: "Automated Mercado Libre publication integration"
-description: "En un sistema inmobiliario, se necesitaba automatizar la publicación de propiedades en Mercado Libre. Se implementó una integración completa con OAuth 2.0, flujo de autenticación asíncrono y gestión de publicaciones."
+description: "In a real estate system, property publications to Mercado Libre needed to be automated. A complete integration was implemented with OAuth 2.0, an asynchronous authentication flow and publication management."
 category: "Backend / API Integration"
 technologies:
   - JavaScript
@@ -39,9 +39,9 @@ The architecture separates concerns across three layers:
 
 ### Backend Architecture
 
-**Controller de Propiedades**: Handles HTTP requests, coordinates between services, returns responses to frontend.
+**Property Controller**: Handles HTTP requests, coordinates between services, returns responses to frontend.
 
-**Servicio de Propiedades**: Retrieves and prepares property data for publication, validates required fields locally.
+**Property Service**: Retrieves and prepares property data for publication, validates required fields locally.
 
 **Servicio MercadoLibre**: Core integration service that:
 - Manages OAuth 2.0 token lifecycle (acquire, refresh, store)
@@ -51,14 +51,14 @@ The architecture separates concerns across three layers:
 
 ### Frontend Flow
 
-1. **Interfaz de Usuario**: User views property and initiates publication
-2. **Modal de MercadoLibre**: Opens authentication/authorization modal
-3. **Detalle de Propiedad**: Handles OAuth callback, sends authorization code to backend
+1. **User Interface**: User views property and initiates publication
+2. **MercadoLibre Modal**: Opens authentication/authorization modal
+3. **Property Detail**: Handles OAuth callback, sends authorization code to backend
 
 ### MercadoLibre API Integration
 
-- **Autenticación**: OAuth 2.0 server-side flow, exchanges authorization code for access token
-- **Publicación**: POST/PUT/DELETE to /items endpoint with validated property data
+- **Authentication**: OAuth 2.0 server-side flow, exchanges authorization code for access token
+- **Publication**: POST/PUT/DELETE to /items endpoint with validated property data
 
 ### Key Technical Decisions
 

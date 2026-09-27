@@ -1,6 +1,6 @@
 ---
 title: "Property recommendation via K-Means clustering"
-description: "En un sistema inmobiliario, se necesitaba mostrar propiedades relacionadas en la página de detalle. Se implementó clustering K-Means en un servicio Python/Flask asíncrono."
+description: "In a real estate system, related properties needed to be shown on the detail page. K-Means clustering was implemented in an asynchronous Python/Flask service."
 category: "Backend / ML"
 technologies:
   - JavaScript

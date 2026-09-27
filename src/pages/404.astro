@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NotFoundPage from '../components/pages/NotFoundPage.astro';
+import { resolveLocale, useI18n } from '../i18n';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
+---
+
+<BaseLayout title={t('notFound.title')} description={t('notFound.message')}>
+  <NotFoundPage />
+</BaseLayout>

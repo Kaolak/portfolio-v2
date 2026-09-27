@@ -1,6 +1,6 @@
 ---
 title: "Reducing slow backend responses"
-description: "En una aplicación empresarial, algunas operaciones comenzaron a presentar tiempos de respuesta elevados. Se aplicaron optimizaciones en consultas, profundidad de respuestas, caché HTTP y caché interno."
+description: "In an enterprise application, some operations began showing high response times. Optimizations were applied to queries, response depth, HTTP caching and internal caching."
 category: "Backend"
 technologies:
   - Java

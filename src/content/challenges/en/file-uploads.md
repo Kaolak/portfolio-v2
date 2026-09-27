@@ -1,6 +1,6 @@
 ---
 title: "Handling large file uploads"
-description: "La aplicación necesitaba trabajar con archivos potencialmente grandes sin generar un impacto innecesario sobre el servidor, permitiendo validaciones asíncronas y estrategias de carga escalonada."
+description: "The application needed to handle potentially large files without creating unnecessary impact on the server, enabling asynchronous validation and staged upload strategies."
 category: "Backend"
 technologies:
   - Java

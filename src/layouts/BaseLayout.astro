@@ -1,4 +1,11 @@
 ---
+import {
+  alternateLinks,
+  ogLocales,
+  resolveLocale,
+  useI18n,
+} from '../i18n';
+
 interface Props {
   title: string;
   description: string;
@@ -13,12 +20,19 @@ const {
   image = '/favicon.svg',
 } = Astro.props;
 
-const siteTitle = 'Esteban Pinto | Backend Developer';
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
+
+const siteTitle = t('meta.homeTitle');
 const fullTitle = title === siteTitle ? title : `${title} | Esteban Pinto`;
+
+const alternates = alternateLinks(Astro.site, new URL(canonical));
+const ogLocale = ogLocales[locale];
+const ogLocaleAlternates = Object.values(ogLocales).filter((value) => value !== ogLocale);
 ---
 
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang={locale} data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,6 +42,12 @@ const fullTitle = title === siteTitle ? title : `${title} | Esteban Pinto`;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Language alternates (Google hreflang rules: absolute, self-referencing, x-default) -->
+    {alternates.map(({ hreflang, href }) => (
+      <link rel="alternate" hreflang={hreflang} href={href} />
+    ))}
 
     <!-- Theme flash prevention -->
     <script is:inline>
@@ -47,7 +67,10 @@ const fullTitle = title === siteTitle ? title : `${title} | Esteban Pinto`;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
-    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale" content={ogLocale} />
+    {ogLocaleAlternates.map((value) => (
+      <meta property="og:locale:alternate" content={value} />
+    ))}
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary" />

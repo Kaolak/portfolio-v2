@@ -1,4 +1,8 @@
 ---
+import { homeAnchor, resolveLocale, useI18n } from '../i18n';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
 ---
 
 <section class="hero" id="hero">
@@ -12,15 +16,14 @@
       </div>
 
       <h1 class="hero-name">Esteban Pinto</h1>
-      <p class="hero-title">Backend Developer</p>
+      <p class="hero-title">{t('hero.title')}</p>
       <p class="hero-description">
-        Construyo sistemas y APIs orientados a resolver problemas reales,
-        con especial interés en Java, Spring Boot y desarrollo de software empresarial.
+        {t('hero.description')}
       </p>
 
       <div class="hero-actions">
-        <a href="/#projects" class="btn btn-primary">View Projects</a>
-        <a href="/#contact" class="btn btn-secondary">Contact Me</a>
+        <a href={homeAnchor(locale, '#projects')} class="btn btn-primary">{t('hero.viewProjects')}</a>
+        <a href={homeAnchor(locale, '#contact')} class="btn btn-secondary">{t('hero.contactMe')}</a>
       </div>
 
       <div class="hero-social">

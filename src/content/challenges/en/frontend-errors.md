@@ -1,6 +1,6 @@
 ---
 title: "Keeping frontend errors useful for developers"
-description: "Los errores producidos en una aplicación frontend podían ser difíciles de investigar posteriormente porque la información visible para el usuario no siempre permitía identificar el origen del problema."
+description: "Errors produced in a frontend application could be hard to investigate afterwards because the information visible to the user didn't always allow identifying the root cause of the problem."
 category: "Frontend / Backend"
 technologies:
   - JavaScript

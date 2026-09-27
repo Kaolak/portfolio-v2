@@ -1,0 +1,67 @@
+---
+import { locales, resolveLocale, switchHref, switcherLabels, useI18n } from '../i18n';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
+const pathname = Astro.url.pathname;
+const hash = Astro.url.hash;
+---
+
+<span class="lang-switcher" role="group" aria-label={t('a11y.langSwitch')}>
+  {locales.map((target) => (
+    <a
+      href={switchHref(pathname, hash, target)}
+      data-path={switchHref(pathname, '', target)}
+      lang={target}
+      hreflang={target}
+      aria-label={switcherLabels[target]}
+      aria-current={target === locale ? 'true' : undefined}
+      class:list={{ active: target === locale }}
+    >
+      {target.toUpperCase()}
+    </a>
+  ))}
+</span>
+
+<style>
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.4rem 0.55rem;
+  }
+
+  .lang-switcher a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    line-height: 1;
+  }
+
+  .lang-switcher a:hover {
+    color: var(--accent);
+  }
+
+  .lang-switcher a.active {
+    color: var(--accent);
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.lang-switcher a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        var path = link.getAttribute('data-path');
+        if (path && location.hash) {
+          link.setAttribute('href', path + location.hash);
+        }
+      });
+    });
+  });
+</script>

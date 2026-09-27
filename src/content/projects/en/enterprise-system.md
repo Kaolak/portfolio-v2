@@ -1,6 +1,6 @@
 ---
 title: "Enterprise System"
-description: "Sistema orientado a la gestión de procesos y operaciones de una organización. Este proyecto representa experiencia práctica en el desarrollo de software aplicado a un entorno real."
+description: "System focused on managing an organization's processes and operations. This project represents hands-on experience in software development applied to a real-world environment."
 category: "Backend / Full Stack"
 featured: true
 private: true

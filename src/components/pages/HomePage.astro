@@ -1,0 +1,118 @@
+---
+import Header from '../Header.astro';
+import Hero from '../Hero.astro';
+import About from '../About.astro';
+import Experience from '../Experience.astro';
+import ProjectCard from '../ProjectCard.astro';
+import SkillGroup from '../SkillGroup.astro';
+import ChallengeCard from '../ChallengeCard.astro';
+import Contact from '../Contact.astro';
+import Footer from '../Footer.astro';
+import { getCollection } from 'astro:content';
+import { resolveLocale, splitEntryId, useI18n } from '../../i18n';
+import '../../styles/global.css';
+import '../../styles/components.css';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
+
+const projects = (await getCollection('projects', ({ data }) => data.featured)).filter(
+  (project) => splitEntryId(project.id).locale === locale
+);
+const challenges = (await getCollection('challenges', ({ data }) => data.featured)).filter(
+  (challenge) => splitEntryId(challenge.id).locale === locale
+);
+
+const skills = {
+  backend: ['Java', 'Spring Boot', 'Spring Security', 'JPA / Hibernate', 'REST APIs', 'WebSockets'],
+  databases: ['MySQL', 'PostgreSQL', 'MongoDB'],
+  cloud: ['AWS', 'Docker', 'GitHub Actions', 'CI/CD', 'CloudFront', 'S3'],
+  frontend: ['React', 'JavaScript', 'HTML', 'CSS'],
+  tools: ['Git', 'GitHub', 'OpenAPI', 'IntelliJ IDEA', 'VS Code'],
+};
+---
+
+<Header />
+
+<main>
+  <Hero />
+  <About />
+  <Experience />
+
+  <section class="section projects" id="projects">
+    <div class="container">
+      <h2 class="section-title fade-in">{t('sections.projects')}</h2>
+      <div class="projects-grid">
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.data.title}
+            category={project.data.category}
+            description={project.data.description}
+            technologies={project.data.technologies}
+            slug={splitEntryId(project.id).slug}
+            featured={project.data.featured}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section skills" id="skills">
+    <div class="container">
+      <h2 class="section-title fade-in">{t('sections.skills')}</h2>
+      <div class="skills-grid">
+        <SkillGroup title={t('skills.backend')} skills={skills.backend} />
+        <SkillGroup title={t('skills.databases')} skills={skills.databases} />
+        <SkillGroup title={t('skills.cloud')} skills={skills.cloud} />
+        <SkillGroup title={t('skills.frontend')} skills={skills.frontend} />
+        <SkillGroup title={t('skills.tools')} skills={skills.tools} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section challenges" id="challenges">
+    <div class="container">
+      <h2 class="section-title fade-in">{t('sections.challenges')}</h2>
+      <div class="challenges-grid">
+        {challenges.map((challenge) => (
+          <ChallengeCard
+            title={challenge.data.title}
+            description={challenge.data.description}
+            technologies={challenge.data.technologies}
+            slug={splitEntryId(challenge.id).slug}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Contact />
+</main>
+
+<Footer />
+
+<style>
+  .projects-grid,
+  .challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid,
+    .challenges-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

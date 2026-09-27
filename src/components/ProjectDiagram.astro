@@ -1,9 +1,13 @@
 ---
+import { resolveLocale, useI18n } from '../i18n';
+import { localizeDiagram } from '../i18n/diagrams';
+
 interface Props {
   type: 'inventory-sales-architecture';
 }
 
 const { type } = Astro.props;
+const { locale, t } = useI18n(resolveLocale(Astro.currentLocale));
 
 const diagrams: Record<string, string> = {
   'inventory-sales-architecture': `
@@ -143,8 +147,8 @@ const diagrams: Record<string, string> = {
 };
 ---
 
-<div class="diagram-container fade-in" aria-label={`Diagram for ${type}`}>
-  <Fragment set:html={diagrams[type]} />
+<div class="diagram-container fade-in" aria-label={`${t('a11y.diagram')} ${type}`}>
+  <Fragment set:html={localizeDiagram(diagrams[type], locale)} />
 </div>
 
 <style>

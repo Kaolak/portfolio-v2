@@ -1,9 +1,13 @@
 ---
+import { resolveLocale, useI18n } from '../i18n';
+import { localizeDiagram } from '../i18n/diagrams';
+
 interface Props {
   type: 'query-optimization' | 'query-optimization-detailed' | 'auth-flow' | 'file-upload' | 'file-upload-async' | 'file-upload-sync' | 'error-reporting' | 'property-clustering' | 'mercadolibre-publication';
 }
 
 const { type } = Astro.props;
+const { locale, t } = useI18n(resolveLocale(Astro.currentLocale));
 
 const diagrams: Record<string, string> = {
   'query-optimization': `
@@ -528,8 +532,8 @@ const diagrams: Record<string, string> = {
 };
 ---
 
-<div class="diagram-container fade-in" aria-label={`Diagram for ${type}`}>
-  <Fragment set:html={diagrams[type]} />
+<div class="diagram-container fade-in" aria-label={`${t('a11y.diagram')} ${type}`}>
+  <Fragment set:html={localizeDiagram(diagrams[type], locale)} />
 </div>
 
 <style>

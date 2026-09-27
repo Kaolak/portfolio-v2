@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChallengePage from '../../../components/pages/ChallengePage.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { splitEntryId } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const challenges = await getCollection('challenges');
+  return challenges
+    .filter((challenge) => splitEntryId(challenge.id).locale === 'en')
+    .map((challenge) => ({
+      params: { slug: splitEntryId(challenge.id).slug },
+      props: { challenge },
+    }));
+}
+
+const { challenge } = Astro.props as { challenge: CollectionEntry<'challenges'> };
+---
+
+<BaseLayout title={challenge.data.title} description={challenge.data.description}>
+  <ChallengePage challenge={challenge} />
+</BaseLayout>

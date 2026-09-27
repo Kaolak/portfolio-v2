@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectPage from '../../../components/pages/ProjectPage.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { splitEntryId } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects
+    .filter((project) => splitEntryId(project.id).locale === 'en')
+    .map((project) => ({
+      params: { slug: splitEntryId(project.id).slug },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <ProjectPage project={project} />
+</BaseLayout>

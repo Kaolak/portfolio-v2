@@ -1,27 +1,33 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { homeAnchor, localePath, resolveLocale, useI18n } from '../i18n';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t } = useI18n(locale);
 
 const navLinks = [
-  { label: 'About', href: '/#about' },
-  { label: 'Experience', href: '/#experience' },
-  { label: 'Projects', href: '/#projects' },
-  { label: 'Challenges', href: '/#challenges' },
-  { label: 'Contact', href: '/#contact' },
+  { label: t('nav.about'), href: homeAnchor(locale, '#about') },
+  { label: t('nav.experience'), href: homeAnchor(locale, '#experience') },
+  { label: t('nav.projects'), href: homeAnchor(locale, '#projects') },
+  { label: t('nav.challenges'), href: homeAnchor(locale, '#challenges') },
+  { label: t('nav.contact'), href: homeAnchor(locale, '#contact') },
 ];
 ---
 
 <header class="header" id="header">
   <div class="container header-inner">
-    <a href="/" class="header-name" aria-label="Home">Esteban Pinto</a>
+    <a href={localePath(locale)} class="header-name" aria-label={t('a11y.home')}>Esteban Pinto</a>
 
-    <nav class="header-nav" aria-label="Main navigation">
+    <nav class="header-nav" aria-label={t('a11y.mainNav')}>
       {navLinks.map((link) => (
         <a href={link.href} class="nav-link">{link.label}</a>
       ))}
+      <LanguageSwitcher />
       <ThemeToggle />
     </nav>
 
-    <button class="mobile-menu-btn" aria-label="Toggle menu" type="button">
+    <button class="mobile-menu-btn" aria-label={t('a11y.toggleMenu')} type="button">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -30,11 +36,12 @@ const navLinks = [
     </button>
   </div>
 
-  <nav class="mobile-nav" aria-label="Mobile navigation">
+  <nav class="mobile-nav" aria-label={t('a11y.mobileNav')}>
     {navLinks.map((link) => (
       <a href={link.href} class="mobile-nav-link">{link.label}</a>
     ))}
     <div class="mobile-nav-toggle">
+      <LanguageSwitcher />
       <ThemeToggle />
     </div>
   </nav>
@@ -128,6 +135,9 @@ const navLinks = [
   }
 
   .mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding-top: 1rem;
   }
 

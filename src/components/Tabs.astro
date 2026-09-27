@@ -1,5 +1,6 @@
 ---
 import ChallengeDiagram from './ChallengeDiagram.astro';
+import { resolveLocale, useI18n } from '../i18n';
 
 interface Props {
   tabs: Array<{
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const { tabs, components } = Astro.props;
+const { t } = useI18n(resolveLocale(Astro.currentLocale));
 const tab0 = tabs[0];
 const tab1 = tabs[1];
 const comp0 = tab0 ? components[tab0.id] : undefined;
@@ -18,7 +20,7 @@ const comp1 = tab1 ? components[tab1.id] : undefined;
 ---
 
 <div class="approach-tabs fade-in">
-  <div class="tab-buttons" role="tablist" aria-label="Approach selection">
+  <div class="tab-buttons" role="tablist" aria-label={t('a11y.approachSelection')}>
     <button
       role="tab"
       aria-selected="true"

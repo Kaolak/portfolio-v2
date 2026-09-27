@@ -1,46 +1,44 @@
 ---
 import { modules } from '../data/experienceModules.js';
+import { resolveLocale, useI18n } from '../i18n';
+
+const locale = resolveLocale(Astro.currentLocale);
+const { t, tList } = useI18n(locale);
+const responsibilities = tList('experience.responsibilities');
 
 function renderTags(tech) {
-  return tech.map(t => `<span class="tag">${t}</span>`).join('');
+  return tech.map((tag) => `<span class="tag">${tag}</span>`).join('');
 }
 ---
 
 <section class="section experience" id="experience">
   <div class="container">
-    <h2 class="section-title fade-in">Experience</h2>
+    <h2 class="section-title fade-in">{t('experience.title')}</h2>
 
     <div class="timeline">
       <div class="timeline-item fade-in">
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <div class="timeline-header">
-            <h3 class="timeline-company">Auditoría General de la Provincia de Salta</h3>
-            <span class="timeline-date">2024 — Present</span>
+            <h3 class="timeline-company">{t('experience.company')}</h3>
+            <span class="timeline-date">{t('experience.date')}</span>
           </div>
-          <p class="timeline-role">Backend Developer</p>
+          <p class="timeline-role">{t('experience.role')}</p>
           <p class="timeline-description">
-            Participación en el desarrollo y evolución de una aplicación
-            institucional, a cargo del backend con Java (Spring Boot) y colaborando
-            con frontend cuando fue necesario.
+            {t('experience.description')}
           </p>
 
           <div class="timeline-details">
-            <h4 class="timeline-subtitle">Responsibilities</h4>
+            <h4 class="timeline-subtitle">{t('experience.responsibilitiesTitle')}</h4>
             <ul class="timeline-list">
-              <li>Desarrollo de funcionalidades backend</li>
-              <li>Diseño e implementación de APIs</li>
-              <li>Integración con bases de datos y almacenamiento de archivos</li>
-              <li>Participación en la planificación y diseño de soluciones tecnológicas</li>
-              <li>Implementación de autenticación y autorización</li>
-              <li>Desarrollo y mantenimiento de funcionalidades existentes</li>
-              <li>Colaboración con frontend</li>
-              <li>Automatización de procesos de desarrollo y despliegue</li>
+              {responsibilities.map((item) => (
+                <li>{item}</li>
+              ))}
             </ul>
           </div>
 
           <div class="modules-section">
-            <h4 class="timeline-subtitle">Key Modules & Features</h4>
+            <h4 class="timeline-subtitle">{t('experience.modulesTitle')}</h4>
             <div class="modules-grid" role="list">
               {modules.map((module) => (
                 <article
@@ -51,8 +49,8 @@ function renderTags(tech) {
                   aria-describedby={`tooltip-${module.id}`}
                 >
                   <div class="module-card-inner">
-                    <h5 class="module-title">{module.title}</h5>
-                    <p class="module-short">{module.shortDesc}</p>
+                    <h5 class="module-title">{module[locale].title}</h5>
+                    <p class="module-short">{module[locale].shortDesc}</p>
                   </div>
 
                   <div
@@ -62,14 +60,14 @@ function renderTags(tech) {
                     aria-hidden="true"
                   >
                     <div class="tooltip-content">
-                      <p class="tooltip-description">{module.description}</p>
+                      <p class="tooltip-description">{module[locale].description}</p>
                       <div class="tooltip-tech" set:html={renderTags(module.tech)} />
                     </div>
                     <div class="tooltip-arrow" aria-hidden="true"></div>
                   </div>
 
                   <div class="module-expanded" aria-hidden="true" hidden>
-                    <p class="expanded-description">{module.description}</p>
+                    <p class="expanded-description">{module[locale].description}</p>
                     <div class="expanded-tech" set:html={renderTags(module.tech)} />
                   </div>
                 </article>

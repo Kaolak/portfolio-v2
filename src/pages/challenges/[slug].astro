@@ -1,198 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import ChallengeDiagram from '../../components/ChallengeDiagram.astro';
-import Footer from '../../components/Footer.astro';
-import Tabs from '../../components/Tabs.astro';
-import '../../styles/global.css';
-import '../../styles/components.css';
-import { getCollection, render, getEntry } from 'astro:content';
+import ChallengePage from '../../components/pages/ChallengePage.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { splitEntryId } from '../../i18n';
 
 export async function getStaticPaths() {
   const challenges = await getCollection('challenges');
-  return challenges.map((challenge) => ({
-    params: { slug: challenge.id.replace(/\.md$/, '') },
-    props: { challenge },
-  }));
+  return challenges
+    .filter((challenge) => splitEntryId(challenge.id).locale === 'es')
+    .map((challenge) => ({
+      params: { slug: splitEntryId(challenge.id).slug },
+      props: { challenge },
+    }));
 }
 
-const { challenge } = Astro.props;
-const { Content } = await render(challenge);
-
-const hasTabs = challenge.data.tabs && challenge.data.tabs.length > 0;
-
-let tabComponents: Record<string, { component: any; diagram?: string }> = {};
-
-if (hasTabs) {
-  for (const tab of challenge.data.tabs) {
-    try {
-      const tabEntry = await getEntry('challengeTabs', tab.content);
-      const { Content: TabContent } = await render(tabEntry);
-      tabComponents[tab.id] = {
-        component: TabContent,
-        diagram: tab.diagram,
-      };
-    } catch (e) {
-      console.warn(`Failed to load tab content for ${tab.content}:`, e);
-    }
-  }
-}
+const { challenge } = Astro.props as { challenge: CollectionEntry<'challenges'> };
 ---
 
-<BaseLayout
-  title={challenge.data.title}
-  description={challenge.data.description}
->
-  <Header />
-
-  <main class="challenge-detail">
-    <div class="container">
-      <a href="/#challenges" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Back to challenges
-      </a>
-
-      <article class="challenge-article">
-        <header class="challenge-header fade-in">
-          <span class="challenge-label">Challenge</span>
-          <h1 class="challenge-title">{challenge.data.title}</h1>
-          <p class="challenge-description">{challenge.data.description}</p>
-
-          <div class="challenge-tech">
-            {challenge.data.technologies.map((tech) => (
-              <span class="tag">{tech}</span>
-            ))}
-          </div>
-        </header>
-
-        {hasTabs ? (
-          <Tabs tabs={challenge.data.tabs} components={tabComponents} />
-        ) : (
-          <>
-            {challenge.data.diagram && (
-              <ChallengeDiagram type={challenge.data.diagram as any} />
-            )}
-          </>
-        )}
-
-        <div class="challenge-content fade-in">
-          <Content />
-        </div>
-      </article>
-    </div>
-  </main>
-
-  <Footer />
+<BaseLayout title={challenge.data.title} description={challenge.data.description}>
+  <ChallengePage challenge={challenge} />
 </BaseLayout>
-
-<style>
-  .challenge-detail {
-    padding-top: 6rem;
-    padding-bottom: 4rem;
-  }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-    transition: color 0.2s ease;
-  }
-
-  .back-link:hover {
-    color: var(--accent);
-  }
-
-  .challenge-article {
-    max-width: 900px;
-  }
-
-  .challenge-header {
-    margin-bottom: 2rem;
-  }
-
-  .challenge-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-
-  .challenge-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
-  }
-
-  .challenge-description {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-  }
-
-  .challenge-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .challenge-content {
-    margin-top: 2rem;
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--text-secondary);
-  }
-
-  .challenge-content :global(h2) {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .challenge-content :global(h3) {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .challenge-content :global(p) {
-    margin-bottom: 1rem;
-  }
-
-  .challenge-content :global(ul) {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-  }
-
-  .challenge-content :global(li) {
-    margin-bottom: 0.35rem;
-    list-style: disc;
-  }
-
-  .challenge-content :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    padding-left: 1rem;
-    margin: 1.5rem 0;
-    color: var(--text-secondary);
-    font-style: italic;
-  }
-
-  .challenge-content :global(strong) {
-    color: var(--text-primary);
-  }
-</style>

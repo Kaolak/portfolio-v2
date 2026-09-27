@@ -1,6 +1,6 @@
 ---
 title: "Real Estate Platform"
-description: "Plataforma web orientada al mercado inmobiliario desarrollada como proyecto de tesis universitaria. Incluye funcionalidades de gestión de propiedades, visualización geográfica y recomendaciones."
+description: "Web platform for the real estate market developed as a university thesis project. Includes property management, geographic visualization and recommendation features."
 category: "Full Stack / University Thesis"
 featured: true
 private: false
